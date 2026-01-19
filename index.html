@@ -127,9 +127,9 @@
         <h3>Revenue Highlights</h3>
         <div class="kicker">
           <ul>
-            <li>CAS Subscription remained stable at $96K, buoyed by quarterly retainer recognition.</li>
-            <li>CAS Hourly revenue increased to $8K, primarily driven by the Client A payroll reconciliation engagement (~$7K).</li>
-            <li>Tax Services declined to $17K, following the expected seasonal tapering after the extension period.</li>
+            <li>Subscription Services remained stable at $96K, buoyed by quarterly retainer recognition.</li>
+            <li>Hourly Services revenue increased to $8K, primarily driven by the Client A payroll reconciliation engagement (~$7K).</li>
+            <li>Advisory Services declined to $17K, following the expected seasonal tapering after the extension period.</li>
           </ul>
           Overall, revenue mix remains heavily weighted toward subscription services (~78%), providing predictable MRR and a strong foundation for Q4 growth.
         </div>
@@ -221,14 +221,14 @@
       <div class="grid g2">
         <div class="card">
           <h3>Revenue Mix</h3>
-          <div style="height:300px"><canvas id="mixChart"></canvas></div>
+          <div style="height:280px;position:relative"><canvas id="mixChart"></canvas></div>
         </div>
         <div class="card">
           <h3>Revenue Commentary</h3>
           <ul class="kicker">
             <li>Subscription mix anchors predictability; targeted upsells and scope realignment can lift avg. revenue per client (ARPC).</li>
             <li>Project/Hourly momentum (Client A) shows capacity to execute short, high‑value bursts.</li>
-            <li>Tax dips seasonally; offset via planning engagements and year‑end prep.</li>
+            <li>Advisory dips seasonally; offset via planning engagements and year‑end prep.</li>
           </ul>
           <div id="mixList" class="kicker" style="margin-top:8px"></div>
         </div>
@@ -300,7 +300,7 @@
         <div class="card">
           <h3>Q4 Focus</h3>
           <ul class="kicker">
-            <li>Replace July churn with targeted client acquisition and year‑end tax planning work.</li>
+            <li>Replace July churn with targeted client acquisition and year‑end planning work.</li>
             <li>Lift utilization toward the 85% benchmark through allocation and scheduling.</li>
             <li>Preserve margin gains; maintain ≥53% GM as a floor.</li>
           </ul>
@@ -336,10 +336,10 @@
       { month: 'Sep', revenue: 122854, grossProfit: 68416, expenses: 60344, netIncome: 8072, grossMargin: 55.69 }
     ];
     const revenueBreakdown = [
-      { name: 'CAS Subscription', value: 96000 },
-      { name: 'CAS Hourly', value: 8000 },
-      { name: 'Tax Services', value: 17000 },
-      { name: 'CAS Project', value: 1200 },
+      { name: 'Subscription Services', value: 96000 },
+      { name: 'Hourly Services', value: 8000 },
+      { name: 'Advisory Services', value: 17000 },
+      { name: 'Project Services', value: 1200 },
       { name: 'Other', value: 654 }
     ];
     const utilizationData = [{"name": "Team Member C","util": 76.0},{"name": "Team Member A","util": 82.1},{"name": "Team Member F","util": 60.1},{"name": "Team Member D","util": 71.9},{"name": "Team Member E","util": 69.5},{"name": "Team Member G","util": 56.3},{"name": "Team Member B","util": 79.5}];
@@ -410,8 +410,8 @@
       mixChart && mixChart.destroy();
       mixChart = new Chart(ctx, {
         type:'pie',
-        data:{ labels: revenueBreakdown.map(r=>r.name), datasets:[{ data: revenueBreakdown.map(r=>r.value) }] },
-        options:{ plugins:{ legend:{ labels:{ color:'#cbd5e1' } }, tooltip:{ callbacks:{ label:(c)=> c.label+': '+fmt(c.parsed) } } } }
+        data:{ labels: revenueBreakdown.map(r=>r.name), datasets:[{ data: revenueBreakdown.map(r=>r.value), backgroundColor:['#3b82f6','#f59e0b','#10b981','#8b5cf6','#6366f1'] }] },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom', labels:{ color:'#cbd5e1', boxWidth:12, padding:8 } }, tooltip:{ callbacks:{ label:(c)=> c.label+': '+fmt(c.parsed) } } } }
       });
       const list = revenueBreakdown.map(r=>`<div class="row" style="justify-content:space-between"><span>${r.name}</span><strong>${fmt(r.value)}</strong></div>`).join('')
         + `<div class="row" style="justify-content:space-between;border-top:1px solid var(--border);margin-top:8px;padding-top:8px"><span>Total</span><strong>${fmt(revenueBreakdown.reduce((s,r)=>s+r.value,0))}</strong></div>`;
@@ -460,7 +460,6 @@
       });
     }
 
-    document.getElementById('btn-print').onclick = ()=> window.print();
     (function init(){ fillKPIs(); buildRevGp(); buildRevNi(); buildMix(); buildUtil(); buildMargin(); buildExp(); })();
   </script>
 
@@ -576,17 +575,7 @@
     {label:'Revenue', data: revenue, borderColor:'#60a5fa', backgroundColor:'rgba(96,165,250,.25)', tension:.3, fill:true},
     {label:'Net Income', data: net, borderColor:'#f59e0b', backgroundColor:'rgba(245,158,11,.2)', tension:.3, fill:true}
   ]);
-  // Mix pie chart (if present) — build from the Sept revenue breakdown
-  (function(){
-    const el = document.getElementById('mixChart'); if(!el) return;
-    new Chart(el.getContext('2d'),{
-      type:'pie',
-      data:{ labels:['CAS Subscription','CAS Hourly','Tax Services','CAS Project','Other'],
-             datasets:[{ data:[96000,8000,17000,1200,654],
-               backgroundColor:['#3b82f6','#f59e0b','#10b981','#8b5cf6','#6366f1']}]},
-      options:{ responsive:true, maintainAspectRatio:false }
-    });
-  })();
+  // Mix pie chart removed - already built by buildMix() function
   // Team utilization
   (function(){
     const el=document.getElementById('utilChart'); if(!el) return;
